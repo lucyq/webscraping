@@ -7,15 +7,22 @@ def main():
   page = requests.get(link)
   soup = BeautifulSoup(page.content, 'html.parser')
 
-  table_rows = soup.find_all('tr', {"class": "show"})
+  polls = soup.find_all('tr', {"class": "show"})
 
-  for r in table_rows:
-    dates = r.find('td', {"class": "dates"}).text
-    pollster = r.find('td', {"class": "pollster"}).text
-    margin = r.find('td', {"class": "raw"}).text
+  table = []
 
+  for p in polls:
+    dates = p.find('td', {"class": "dates"}).text
+    pollster = p.find('td', {"class": "pollster"}).text
+    margin = p.find('td', {"class": "raw"}).text
 
+    table.append([dates, pollster, margin])
 
+  with open('election_data.csv', 'wb') as csvfile:
+    wrtr = csv.writer(csvfile)
+    wrtr.writerow(['date', 'pollster', 'margin'])
+    for row in table:
+      wrtr.writerow(row)
 
 
 if __name__ == "__main__":
