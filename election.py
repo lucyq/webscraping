@@ -4,7 +4,11 @@ import csv
 
 def main():
   link = "https://projects.fivethirtyeight.com/2018-midterm-election-forecast/senate/massachusetts/";
-  page = requests.get(link)
+  headers = {
+    'User-Agent': 'Educational workshop',
+    'From': 'your_email@gmail.com'
+  }
+  page = requests.get(link, headers=headers)
   soup = BeautifulSoup(page.content, 'html.parser')
 
   polls = soup.find_all('tr', {"class": "show"})
